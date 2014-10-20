@@ -27,7 +27,7 @@ module AttrTypecastable
     }.freeze
 
     class << self
-      def find_typecaster(typecaster, **options)
+      def typecaster_for(typecaster, **options)
         const = typecaster.is_a?(String) ? typecaster.constantize : typecaster
         BASIC_TYPES.fetch(const, const)
       rescue NameError

@@ -28,7 +28,7 @@ module AttrTypecastable
       options = DEFAULT_OPTIONS.merge(options)
       must_have_default_when_disallow_nil(options)
 
-      typecaster = Types.find_typecaster(typecaster_name).new(options)
+      typecaster = Types.typecaster_for(typecaster_name).new(options)
       typed_attr_reflections[attribute_name] = Reflection.new(attribute_name, typecaster, options)
 
       attr_reader attribute_name
