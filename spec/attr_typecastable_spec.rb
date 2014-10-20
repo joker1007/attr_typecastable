@@ -42,6 +42,9 @@ describe AttrTypecastable do
     typed_attr_accessor :age, Integer
     typed_attr_accessor :bmi, Float
     typed_attr_accessor :property, CastToMoney
+    typed_attr_accessor :adult, Boolean
+    typed_attr_accessor :admin, Boolean, true_value: ["yes"]
+    typed_attr_accessor :active, Boolean, true_value: [/true/i]
 
     def initialize(name: nil, default_name: nil)
       self.name = name
@@ -95,6 +98,34 @@ describe AttrTypecastable do
 
       user.property = 10000
       assert { user.property == Money.new(10000) }
+
+      user.adult = "true"
+      assert { user.adult == true }
+
+      user.adult = "other"
+      assert { user.adult == true }
+
+      user.adult = "false"
+      assert { user.adult == false }
+
+      user.adult = 1
+      assert { user.adult == true }
+
+      user.adult = 0
+      assert { user.adult == false }
+
+      user.admin = "yes"
+      assert { user.admin == true }
+
+      user.admin = false
+      assert { user.admin == false }
+
+      user.active = "tRUe"
+      assert { user.active == true }
+
+      user.default_name = "Changed"
+      user.reset_default_name!
+      assert { user.default_name == "Foo" }
 
       user2 = User.new(name: 20)
       assert { user2.name == "20" }

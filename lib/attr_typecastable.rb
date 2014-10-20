@@ -10,9 +10,7 @@ module AttrTypecastable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute(:typed_attr_default_values)
     class_attribute(:typed_attr_options)
-    self.typed_attr_default_values = {}
     self.typed_attr_options = {}
     prepend InitializeHook
   end
@@ -20,15 +18,13 @@ module AttrTypecastable
   module ClassMethods
     DEFAULT_OPTIONS = {
       allow_nil: true,
-      default: nil,
+      cast_method: true,
+      reset_method: true,
     }.freeze
 
     def typed_attr_accessor(attribute_name, typecaster, **options)
       options = DEFAULT_OPTIONS.merge(options)
       must_have_default_when_disallow_nil(options)
-
-      default_value = options.delete(:default)
-      typed_attr_default_values[attribute_name] = default_value if default_value
 
       typed_attr_options[attribute_name] = options
 
@@ -40,7 +36,8 @@ module AttrTypecastable
         typed_attr_options[attribute_name]
       )
 
-      define_cast_attribute(attribute_name)
+      define_cast_attribute(attribute_name) if options[:cast_method]
+      define_reset_attribute(attribute_name, typed_attr_options[attribute_name]) if options[:reset_method]
     end
 
     private
@@ -55,6 +52,13 @@ module AttrTypecastable
     def define_cast_attribute(attribute_name)
       define_method("cast_#{attribute_name}!") do
         value = instance_variable_get("@#{attribute_name}")
+        send("#{attribute_name}=", value)
+      end
+    end
+
+    def define_reset_attribute(attribute_name, **options)
+      define_method("reset_#{attribute_name}!") do
+        value = options.key?(:default) ? options[:default] : nil
         send("#{attribute_name}=", value)
       end
     end

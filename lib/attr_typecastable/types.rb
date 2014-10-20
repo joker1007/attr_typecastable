@@ -8,6 +8,11 @@ require 'attr_typecastable/types/time'
 require 'attr_typecastable/types/date'
 require 'attr_typecastable/types/date_time'
 require 'attr_typecastable/types/float'
+require 'attr_typecastable/types/boolean'
+
+unless defined?(::Boolean)
+  class Boolean; end
+end
 
 module AttrTypecastable
   module Types
@@ -18,6 +23,7 @@ module AttrTypecastable
       ::Date => AttrTypecastable::Types::Date,
       ::DateTime => AttrTypecastable::Types::DateTime,
       ::Float => AttrTypecastable::Types::Float,
+      ::Boolean => AttrTypecastable::Types::Boolean,
     }.freeze
 
     class << self

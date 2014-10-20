@@ -3,10 +3,10 @@ module AttrTypecastable
     def initialize(*)
       super
 
-      self.class.typed_attr_default_values.each do |attr, default|
+      self.class.typed_attr_options.each do |attr, options|
         current = send("#{attr}")
 
-        send("#{attr}=", default) if current.nil?
+        send("#{attr}=", options[:default]) if current.nil?
       end
     end
   end
