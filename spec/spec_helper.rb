@@ -1,4 +1,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'coveralls'
+Coveralls.wear!
+
 require 'attr_typecastable'
 
 require 'rspec-power_assert'
