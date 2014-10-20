@@ -28,14 +28,13 @@ class CastToMoney < AttrTypecastable::Types::Base
   private
 
   # must define #do_typecast method
-  def do_typecast
-    # can use @value and @options
-    # @value is assigned value
+  def do_typecast(value)
+    # can use @options
     # @options is hash given to `typed_attr_accessor`
-    return @value if @value.is_a?(Money)
+    return value if value.is_a?(Money)
 
-    if @value.is_a?(Integer)
-      Money.new(@value)
+    if value.is_a?(Integer)
+      Money.new(value)
     else
       raise AttrTypecastable::Types::CastError, "Cannot convert to Money"
     end
