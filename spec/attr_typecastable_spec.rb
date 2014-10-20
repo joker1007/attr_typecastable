@@ -19,11 +19,11 @@ describe AttrTypecastable do
   class CastToMoney < AttrTypecastable::Types::Base
     private
 
-    def do_typecast
-      return @value if @value.is_a?(Money)
+    def do_typecast(value)
+      return value if value.is_a?(Money)
 
-      if @value.is_a?(Integer)
-        Money.new(@value)
+      if value.is_a?(Integer)
+        Money.new(value)
       else
         raise AttrTypecastable::Types::CastError, "Cannot convert to Money"
       end

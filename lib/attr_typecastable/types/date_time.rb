@@ -7,14 +7,14 @@ require 'active_support/core_ext/string'
 module AttrTypecastable
   module Types
     class DateTime < Base
-      def do_typecast
-        return @value if @value.is_a?(::DateTime)
+      def do_typecast(value)
+        return value if value.is_a?(::DateTime)
 
-        case @value
+        case value
         when ::String
-          @value.to_time.to_datetime
+          value.to_time.to_datetime
         when ::Time, ::Date
-          @value.to_datetime
+          value.to_datetime
         else
           raise CastError, "cannot convert to DateTime"
         end

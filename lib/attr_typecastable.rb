@@ -1,6 +1,7 @@
 require "attr_typecastable/version"
 require "attr_typecastable/types"
 require "attr_typecastable/initialize_hook"
+require "attr_typecastable/reflection"
 
 require "active_support/concern"
 require "active_support/core_ext/class"
@@ -10,8 +11,8 @@ module AttrTypecastable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute(:typed_attr_options)
-    self.typed_attr_options = {}
+    class_attribute(:typed_attr_reflections)
+    self.typed_attr_reflections = {}
     prepend InitializeHook
   end
 
@@ -22,45 +23,48 @@ module AttrTypecastable
       reset_method: true,
     }.freeze
 
-    def typed_attr_accessor(attribute_name, typecaster, **options)
+    def typed_attr_accessor(attribute_name, typecaster_name, **options)
+      attribute_name = attribute_name.to_sym
       options = DEFAULT_OPTIONS.merge(options)
       must_have_default_when_disallow_nil(options)
 
-      typed_attr_options[attribute_name] = options
+      typecaster = Types.find_typecaster(typecaster_name).new(options)
+      typed_attr_reflections[attribute_name] = Reflection.new(attribute_name, typecaster, options)
 
       attr_reader attribute_name
 
-      define_typed_attr_writer(
-        attribute_name,
-        Types.find_typecaster(typecaster),
-        typed_attr_options[attribute_name]
-      )
-
+      define_typed_attr_writer(attribute_name)
       define_cast_attribute(attribute_name) if options[:cast_method]
-      define_reset_attribute(attribute_name, typed_attr_options[attribute_name]) if options[:reset_method]
+      define_reset_attribute(attribute_name) if options[:reset_method]
     end
 
     private
 
-    def define_typed_attr_writer(attribute_name, typecaster, **options)
-      define_method("#{attribute_name}=") do |value|
-        casted_value = typecaster.new(value, options).typecast
-        instance_variable_set("@#{attribute_name}", casted_value)
-      end
+    def define_typed_attr_writer(attribute_name)
+      class_eval(<<-RUBY, __FILE__, __LINE__ + 1)
+        def #{attribute_name}=(value)
+          typecaster = self.class.typed_attr_reflections[:#{attribute_name}].typecaster
+          @#{attribute_name} = typecaster.typecast(value)
+        end
+      RUBY
     end
 
     def define_cast_attribute(attribute_name)
-      define_method("cast_#{attribute_name}!") do
-        value = instance_variable_get("@#{attribute_name}")
-        send("#{attribute_name}=", value)
-      end
+      class_eval(<<-RUBY, __FILE__, __LINE__ + 1)
+        def cast_#{attribute_name}!
+          value = @#{attribute_name}
+          self.#{attribute_name} = value
+        end
+      RUBY
     end
 
     def define_reset_attribute(attribute_name, **options)
-      define_method("reset_#{attribute_name}!") do
-        value = options.key?(:default) ? options[:default] : nil
-        send("#{attribute_name}=", value)
-      end
+      class_eval(<<-RUBY, __FILE__, __LINE__ + 1)
+        def reset_#{attribute_name}!
+          value = self.class.typed_attr_reflections[:#{attribute_name}].default
+          self.#{attribute_name} = value
+        end
+      RUBY
     end
 
     def must_have_default_when_disallow_nil(options)
