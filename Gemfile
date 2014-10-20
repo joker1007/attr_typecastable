@@ -5,3 +5,4 @@ gemspec
 
 gem 'rspec-power_assert', github: 'joker1007/rspec-power_assert'
 gem 'power_assert', github: 'k-tsj/power_assert'
+gem 'benchmark-ips'
