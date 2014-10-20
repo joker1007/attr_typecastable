@@ -9,18 +9,6 @@ module AttrTypecastable
       freeze
     end
 
-    def allow_nil
-      @options[:allow_nil]
-    end
-
-    def cast_method
-      @options[:cast_method]
-    end
-
-    def reset_method
-      @options[:reset_method]
-    end
-
     def default
       @options[:default]
     end
