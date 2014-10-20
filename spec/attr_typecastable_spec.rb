@@ -45,6 +45,7 @@ describe AttrTypecastable do
     typed_attr_accessor :adult, Boolean
     typed_attr_accessor :admin, Boolean, true_value: ["yes"]
     typed_attr_accessor :active, Boolean, true_value: [/true/i]
+    typed_attr_accessor :manager, Boolean, allow_nil: false, default: false
 
     def initialize(name: nil, default_name: nil)
       self.name = name
@@ -91,7 +92,12 @@ describe AttrTypecastable do
       assert { user.birthday_time == Time.new(2012, 10, 1, 10) }
 
       user.birthday_datetime = "2012-10-01 10:00:00"
+      assert { user.birthday_datetime.is_a?(DateTime) }
       assert { user.birthday_datetime == Time.new(2012, 10, 1, 10) }
+
+      user.birthday_datetime = Time.new(2012, 10, 2, 2)
+      assert { user.birthday_datetime.is_a?(DateTime) }
+      assert { user.birthday_datetime == Time.new(2012, 10, 2, 2) }
 
       user.bmi = "20.1"
       assert { user.bmi > 20.09 && user.bmi < 20.11 }
@@ -122,6 +128,11 @@ describe AttrTypecastable do
 
       user.active = "tRUe"
       assert { user.active == true }
+
+      assert { user.manager == false }
+
+      user.manager = "true"
+      assert { user.manager == true }
 
       user.default_name = "Changed"
       user.reset_default_name!
