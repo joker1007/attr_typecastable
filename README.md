@@ -1,4 +1,5 @@
 # attr\_typecastable
+[![Build Status](https://travis-ci.org/joker1007/attr_typecastable.svg?branch=master)](https://travis-ci.org/joker1007/attr_typecastable)
 
 attr\_accessor with typecast feature.
 
