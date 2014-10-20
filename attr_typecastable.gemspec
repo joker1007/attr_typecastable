@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = AttrTypecastable::VERSION
   spec.authors       = ["joker1007"]
   spec.email         = ["kakyoin.hierophant@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{attr_accessor with typecast feature.}
+  spec.description   = %q{attr_accessor with typecast feature.}
+  spec.homepage      = "https://github.com/joker1007/attr_typecastable"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
