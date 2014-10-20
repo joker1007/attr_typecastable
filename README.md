@@ -76,7 +76,7 @@ class User
   typed_attr_accessor :property, CastToMoney
 
   # Boolean typecaster uses `#===` method in order to check whether value is true or false.
-  typed_attr_accessor :adult, Boolean, # default true_values: ["true", 1], false_values: ["false", 0]
+  typed_attr_accessor :adult, Boolean # default true_values: ["true", 1], false_values: ["false", 0]
   typed_attr_accessor :admin, Boolean, true_value: ["yes"]
   typed_attr_accessor :active, Boolean, true_value: [/true/i] # can use Regexp
 
@@ -85,6 +85,34 @@ class User
     self.default_name = default_name
   end
 end
+
+user = User.new
+user.name          # => nil
+user.default_name  # => "Foo"
+
+user.name = 1
+user.name          # => "1"
+
+user.birthday = "1990-10-1"
+user.birthday      # => Mon, 01 Oct 1990
+
+user.adult = "true"
+user.adult         # => true
+
+user.adult = "false"
+user.adult         # => false
+
+user.adult = "other"
+user.adult         # => true
+
+user.admin = "yes"
+user.admin         # => true
+
+user.active = "TrUe"
+user.active        # => true
+
+user2 = User.new(default_name: "joker")
+user2.default_name # => "joker"
 ```
 
 
