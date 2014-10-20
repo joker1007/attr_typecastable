@@ -25,33 +25,43 @@ module AttrTypecastable
 
     def typed_attr_accessor(attribute_name, typecaster, **options)
       options = DEFAULT_OPTIONS.merge(options)
-      raise "Need `default` option when allow_nil is false" if disallow_nil_and_no_default?(options)
+      must_have_default_when_disallow_nil(options)
 
       default_value = options.delete(:default)
-      self.typed_attr_default_values[attribute_name] = default_value if default_value
+      typed_attr_default_values[attribute_name] = default_value if default_value
 
-      self.typed_attr_options[attribute_name] = options
+      typed_attr_options[attribute_name] = options
 
-      define_method(attribute_name) do
-        instance_variable_get("@#{attribute_name}")
-      end
+      attr_reader attribute_name
 
-      define_method("#{attribute_name}=") do |value|
-        t = Types.find_typecaster(typecaster)
-        casted_value = t.new(value, self.typed_attr_options[attribute_name]).typecast
-        instance_variable_set("@#{attribute_name}", casted_value)
-      end
+      define_typed_attr_writer(
+        attribute_name,
+        Types.find_typecaster(typecaster),
+        typed_attr_options[attribute_name]
+      )
 
-      define_method("cast_#{attribute_name}!") do
-        value = send(attribute_name)
-        send("#{attribute_name}=", value)
-      end
+      define_cast_attribute(attribute_name)
     end
 
     private
 
-    def disallow_nil_and_no_default?(options)
-      options[:allow_nil].! && options[:default].nil?
+    def define_typed_attr_writer(attribute_name, typecaster, **options)
+      define_method("#{attribute_name}=") do |value|
+        casted_value = typecaster.new(value, options).typecast
+        instance_variable_set("@#{attribute_name}", casted_value)
+      end
+    end
+
+    def define_cast_attribute(attribute_name)
+      define_method("cast_#{attribute_name}!") do
+        value = instance_variable_get("@#{attribute_name}")
+        send("#{attribute_name}=", value)
+      end
+    end
+
+    def must_have_default_when_disallow_nil(options)
+      raise "Need `default` option when allow_nil is false" \
+        if options[:allow_nil].! && options[:default].nil?
     end
   end
 end
