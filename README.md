@@ -4,6 +4,9 @@
 
 attr\_accessor with typecast feature.
 
+## Requirements
+- Ruby 2.0 or later
+
 ## Installation
 
 Add this line to your application's Gemfile:
