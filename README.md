@@ -1,6 +1,6 @@
 # attr\_typecastable
 
-attr\_accessor with typecast process.
+attr\_accessor with typecast feature.
 
 ## Installation
 
