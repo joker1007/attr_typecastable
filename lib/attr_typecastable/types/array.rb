@@ -8,10 +8,6 @@ module AttrTypecastable
     class ArrayBase < Base
       class_attribute :inner_typecaster
 
-      def initialize(**options)
-        super
-      end
-
       private
 
       def do_typecast(value)
