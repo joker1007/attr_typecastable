@@ -35,7 +35,7 @@ module AttrTypecastable
 
     class << self
       def typecaster_for(typecaster, **options)
-        const = typecaster.is_a?(String) ? typecaster.constantize : typecaster
+        const = typecaster.is_a?(::String) ? typecaster.constantize : typecaster
         BASIC_TYPES.fetch(const, const)
       rescue NameError
         raise TypeCasterNotFound, "#{typecaster} is undefined"

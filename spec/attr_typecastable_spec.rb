@@ -36,7 +36,7 @@ describe AttrTypecastable do
     typed_attr_accessor :name, String
     typed_attr_accessor :default_name, String, default: "Foo"
     typed_attr_accessor :not_nil_name, String, allow_nil: false, default: ""
-    typed_attr_accessor :birthday, Date
+    typed_attr_accessor :birthday, "Date"
     typed_attr_accessor :birthday_time, Time
     typed_attr_accessor :birthday_datetime, DateTime
     typed_attr_accessor :age, Integer

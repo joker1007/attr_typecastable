@@ -11,7 +11,7 @@ module AttrTypecastable
       end
 
       def do_typecast(value)
-        return value if value.is_a?(::TrueClass) || value.is_a?(FalseClass)
+        return value if value.is_a?(::TrueClass) || value.is_a?(::FalseClass)
 
         true_values = Array(@options[:true_values])
         false_values = Array(@options[:false_values])
