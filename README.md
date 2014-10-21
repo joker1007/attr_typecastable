@@ -24,6 +24,18 @@ Or install it yourself as:
 
     $ gem install attr_typecastable
 
+## Default Typecasters
+- Object (no typecasting)
+- String
+- Integer
+- Float
+- Rational
+- BigDecimal
+- Boolean
+- Time
+- Date
+- DateTime
+
 ## Usage
 
 ```ruby
