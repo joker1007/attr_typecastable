@@ -14,6 +14,7 @@ require 'attr_typecastable/types/rational'
 require 'attr_typecastable/types/big_decimal'
 require 'attr_typecastable/types/boolean'
 require 'attr_typecastable/types/object'
+require 'attr_typecastable/types/array'
 
 unless defined?(::Boolean)
   class Boolean; end

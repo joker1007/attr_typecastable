@@ -58,6 +58,8 @@ describe AttrTypecastable do
     typed_attr_accessor :raw_value2, Object
     typed_attr_accessor :raw_value3, default: "raw_value3"
 
+    typed_attr_accessor :skills, AttrTypecastable::Types::ArrayFactory.build(String), default: []
+
     def initialize(name: nil, default_name: nil)
       self.name = name
       self.default_name = default_name
@@ -180,6 +182,14 @@ describe AttrTypecastable do
       assert { user.raw_value3 == "raw_value3" }
       user.raw_value3 = 3.0
       assert { user.raw_value3 > 2.9 }
+
+      assert { user.skills == [] }
+      user.skills = "ruby"
+      assert { user.skills == ["ruby"] }
+      user.skills = 1
+      assert { user.skills == ["1"] }
+      user.skills = ["ruby", "js", 1, [2]]
+      assert { user.skills == ["ruby", "js", "1", "[2]"] }
 
       user2 = User.new(name: 20)
       assert { user2.name == "20" }
