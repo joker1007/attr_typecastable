@@ -46,6 +46,9 @@ describe AttrTypecastable do
     typed_attr_accessor :admin, Boolean, true_value: ["yes"]
     typed_attr_accessor :active, Boolean, true_value: [/true/i]
     typed_attr_accessor :manager, Boolean, allow_nil: false, default: false
+    typed_attr_accessor :raw_value, nil, default: 1
+    typed_attr_accessor :raw_value2, Object
+    typed_attr_accessor :raw_value3, default: "raw_value3"
 
     def initialize(name: nil, default_name: nil)
       self.name = name
@@ -137,6 +140,17 @@ describe AttrTypecastable do
       user.default_name = "Changed"
       user.reset_default_name!
       assert { user.default_name == "Foo" }
+
+      assert { user.raw_value == 1 }
+      user.raw_value = "raw"
+      assert { user.raw_value == "raw" }
+
+      user.raw_value2 = "raw_value2"
+      assert { user.raw_value2 == "raw_value2" }
+
+      assert { user.raw_value3 == "raw_value3" }
+      user.raw_value3 = 3r
+      assert { user.raw_value3 == 3r }
 
       user2 = User.new(name: 20)
       assert { user2.name == "20" }

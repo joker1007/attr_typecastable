@@ -9,6 +9,7 @@ require 'attr_typecastable/types/date'
 require 'attr_typecastable/types/date_time'
 require 'attr_typecastable/types/float'
 require 'attr_typecastable/types/boolean'
+require 'attr_typecastable/types/object'
 
 unless defined?(::Boolean)
   class Boolean; end
@@ -17,6 +18,7 @@ end
 module AttrTypecastable
   module Types
     BASIC_TYPES = {
+      ::Object => AttrTypecastable::Types::Object,
       ::String => AttrTypecastable::Types::String,
       ::Integer => AttrTypecastable::Types::Integer,
       ::Time => AttrTypecastable::Types::Time,

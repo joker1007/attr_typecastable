@@ -23,12 +23,12 @@ module AttrTypecastable
       reset_method: true,
     }.freeze
 
-    def typed_attr_accessor(attribute_name, typecaster_name, **options)
+    def typed_attr_accessor(attribute_name, typecaster_name = Object, **options)
       attribute_name = attribute_name.to_sym
       options = DEFAULT_OPTIONS.merge(options)
       must_have_default_when_disallow_nil(options)
 
-      typecaster = Types.typecaster_for(typecaster_name).new(options)
+      typecaster = Types.typecaster_for(typecaster_name || Object).new(options)
       typed_attr_reflections[attribute_name] = Reflection.new(attribute_name, typecaster, options)
 
       attr_reader attribute_name
