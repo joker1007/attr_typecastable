@@ -60,6 +60,10 @@ describe AttrTypecastable do
 
     typed_attr_accessor :skills, AttrTypecastable::Types::ArrayFactory.build(String), default: []
     typed_attr_accessor :friend_ids, AttrTypecastable::Types::ArrayFactory.build(Integer)
+    typed_attr_accessor :nested_array,
+      AttrTypecastable::Types::ArrayFactory.build(
+        AttrTypecastable::Types::ArrayFactory.build(Integer)
+      )
 
     def initialize(name: nil, default_name: nil)
       self.name = name
@@ -197,6 +201,13 @@ describe AttrTypecastable do
       assert { user.friend_ids == [1] }
       user.friend_ids = ["1", 2, 3]
       assert { user.friend_ids == [1, 2, 3] }
+
+      user.nested_array = 1
+      assert { user.nested_array == [[1]] }
+      user.nested_array = [2]
+      assert { user.nested_array == [[2]] }
+      user.nested_array = [[2, "3"]]
+      assert { user.nested_array == [[2, 3]] }
 
       user2 = User.new(name: 20)
       assert { user2.name == "20" }
