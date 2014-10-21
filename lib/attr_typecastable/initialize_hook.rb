@@ -5,8 +5,15 @@ module AttrTypecastable
 
       self.class.typed_attr_reflections.select {|_, r| r.has_default?}.each do |attr, reflection|
         current = send("#{attr}")
+        next unless current.nil?
 
-        send("#{attr}=", reflection.default) if current.nil?
+        default = reflection.default
+
+        if default.respond_to?(:call)
+          default.call(self, attr)
+        else
+          send("#{attr}=", reflection.default)
+        end
       end
     end
   end
