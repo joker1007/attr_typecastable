@@ -27,6 +27,7 @@ Or install it yourself as:
 ## Default Typecasters
 - Object (no typecasting)
 - String
+- Symbol
 - Integer
 - Float
 - Rational
@@ -35,6 +36,7 @@ Or install it yourself as:
 - Time
 - Date
 - DateTime
+- ArrayFactory (Array Typecaster builder)
 
 ## Usage
 
