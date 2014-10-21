@@ -43,6 +43,9 @@ describe AttrTypecastable do
     typed_attr_accessor :bmi, Float
     typed_attr_accessor :bmi_r, Rational
     typed_attr_accessor :property, CastToMoney
+    typed_attr_accessor :debt, BigDecimal
+    typed_attr_accessor :debt_with_precision, BigDecimal, precision: 3
+    typed_attr_accessor :debt_with_fig, BigDecimal, fig: 5
     typed_attr_accessor :adult, Boolean
     typed_attr_accessor :admin, Boolean, true_value: ["yes"]
     typed_attr_accessor :active, Boolean, true_value: [/true/i]
@@ -111,6 +114,21 @@ describe AttrTypecastable do
 
       user.property = 10000
       assert { user.property == Money.new(10000) }
+
+      user.debt = 10000
+      assert { user.debt == BigDecimal.new("10000") }
+      user.debt = Rational(10000, 1)
+      assert { user.debt == BigDecimal.new("10000") }
+      user.debt = 10000.11
+      assert { user.debt == BigDecimal.new("10000.11") }
+      user.debt = "10000.12"
+      assert { user.debt == BigDecimal.new("10000.12") }
+
+      user.debt_with_precision = 1.3333333333
+      assert { user.debt_with_precision == BigDecimal.new("1.33") }
+
+      user.debt_with_fig = Rational("1000.11")
+      assert { user.debt_with_fig == BigDecimal.new("1000.1") }
 
       user.adult = "true"
       assert { user.adult == true }
