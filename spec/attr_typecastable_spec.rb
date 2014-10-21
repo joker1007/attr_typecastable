@@ -149,8 +149,8 @@ describe AttrTypecastable do
       assert { user.raw_value2 == "raw_value2" }
 
       assert { user.raw_value3 == "raw_value3" }
-      user.raw_value3 = 3r
-      assert { user.raw_value3 == 3r }
+      user.raw_value3 = 3.0
+      assert { user.raw_value3 > 2.9 }
 
       user2 = User.new(name: 20)
       assert { user2.name == "20" }
