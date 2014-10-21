@@ -41,6 +41,7 @@ describe AttrTypecastable do
     typed_attr_accessor :birthday_datetime, DateTime
     typed_attr_accessor :age, Integer
     typed_attr_accessor :bmi, Float
+    typed_attr_accessor :bmi_r, Rational
     typed_attr_accessor :property, CastToMoney
     typed_attr_accessor :adult, Boolean
     typed_attr_accessor :admin, Boolean, true_value: ["yes"]
@@ -104,6 +105,9 @@ describe AttrTypecastable do
 
       user.bmi = "20.1"
       assert { user.bmi > 20.09 && user.bmi < 20.11 }
+
+      user.bmi = "20.1"
+      assert { user.bmi == "20.1".to_r }
 
       user.property = 10000
       assert { user.property == Money.new(10000) }
