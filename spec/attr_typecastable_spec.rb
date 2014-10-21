@@ -39,6 +39,7 @@ describe AttrTypecastable do
       user.conditional_default = "Hello #{user.name}"
     }
     typed_attr_accessor :not_nil_name, String, allow_nil: false, default: ""
+    typed_attr_accessor :role, Symbol
     typed_attr_accessor :birthday, "Date"
     typed_attr_accessor :birthday_time, Time
     typed_attr_accessor :birthday_datetime, DateTime
@@ -85,6 +86,9 @@ describe AttrTypecastable do
 
       user.not_nil_name = "joker"
       assert { user.not_nil_name == "joker" }
+
+      user.role = "super_user"
+      assert { user.role == :super_user }
 
       user.age = 5
       assert { user.age == 5 }

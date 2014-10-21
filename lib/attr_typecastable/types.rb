@@ -4,6 +4,7 @@ require 'active_support'
 
 require 'attr_typecastable/types/exception'
 require 'attr_typecastable/types/string'
+require 'attr_typecastable/types/symbol'
 require 'attr_typecastable/types/integer'
 require 'attr_typecastable/types/time'
 require 'attr_typecastable/types/date'
@@ -23,6 +24,7 @@ module AttrTypecastable
     BASIC_TYPES = {
       ::Object => AttrTypecastable::Types::Object,
       ::String => AttrTypecastable::Types::String,
+      ::Symbol => AttrTypecastable::Types::Symbol,
       ::Integer => AttrTypecastable::Types::Integer,
       ::Time => AttrTypecastable::Types::Time,
       ::Date => AttrTypecastable::Types::Date,
