@@ -61,7 +61,8 @@ module AttrTypecastable
     def define_reset_attribute(attribute_name, **options)
       class_eval(<<-RUBY, __FILE__, __LINE__ + 1)
         def reset_#{attribute_name}!
-          value = self.class.typed_attr_reflections[:#{attribute_name}].default
+          default = self.class.typed_attr_reflections[:#{attribute_name}].default
+          value = default.respond_to?(:call) ? default.call(self, :#{attribute_name}) : default
           self.#{attribute_name} = value
         end
       RUBY

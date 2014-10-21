@@ -9,11 +9,8 @@ module AttrTypecastable
 
         default = reflection.default
 
-        if default.respond_to?(:call)
-          default.call(self, attr)
-        else
-          send("#{attr}=", reflection.default)
-        end
+        v = default.respond_to?(:call) ? default.call(self, attr) : default
+        send("#{attr}=", v)
       end
     end
   end

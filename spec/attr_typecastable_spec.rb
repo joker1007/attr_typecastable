@@ -36,7 +36,7 @@ describe AttrTypecastable do
     typed_attr_accessor :name, String
     typed_attr_accessor :default_name, String, default: "Foo"
     typed_attr_accessor :conditional_default, String, default: proc { |user|
-      user.conditional_default = "Hello #{user.name}"
+      "Hello #{user.name}"
     }
     typed_attr_accessor :not_nil_name, String, allow_nil: false, default: ""
     typed_attr_accessor :role, Symbol
@@ -201,6 +201,10 @@ describe AttrTypecastable do
       user2 = User.new(name: 20)
       assert { user2.name == "20" }
       assert { user2.default_name == "Foo" }
+      assert { user2.conditional_default == "Hello 20" }
+      user2.conditional_default = "hoge"
+      assert { user2.conditional_default == "hoge" }
+      user2.reset_conditional_default!
       assert { user2.conditional_default == "Hello 20" }
 
       user3 = User.new(default_name: "kakyoin")
