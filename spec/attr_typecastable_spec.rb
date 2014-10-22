@@ -51,8 +51,8 @@ describe AttrTypecastable do
     typed_attr_accessor :debt_with_precision, BigDecimal, precision: 3
     typed_attr_accessor :debt_with_fig, BigDecimal, fig: 5
     typed_attr_accessor :adult, Boolean
-    typed_attr_accessor :admin, Boolean, true_value: ["yes"]
-    typed_attr_accessor :active, Boolean, true_value: [/true/i]
+    typed_attr_accessor :admin, Boolean, true_values: ["yes"], false_values: ["no"]
+    typed_attr_accessor :active, Boolean, true_values: [/true/i], false_values: [/false/i]
     typed_attr_accessor :manager, Boolean, allow_nil: false, default: false
     typed_attr_accessor :raw_value, nil, default: 1
     typed_attr_accessor :raw_value2, Object
@@ -161,12 +161,16 @@ describe AttrTypecastable do
 
       user.admin = "yes"
       assert { user.admin == true }
+      user.admin = "no"
+      assert { user.admin == false }
 
       user.admin = false
       assert { user.admin == false }
 
       user.active = "tRUe"
       assert { user.active == true }
+      user.active = "FALSE"
+      assert { user.active == false }
 
       assert { user.manager == false }
 

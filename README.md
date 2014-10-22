@@ -91,8 +91,8 @@ class User
 
   # Boolean typecaster uses `#===` method in order to check whether value is true or false.
   typed_attr_accessor :adult, Boolean # default true_values: ["true", 1], false_values: ["false", 0]
-  typed_attr_accessor :admin, Boolean, true_value: ["yes"]
-  typed_attr_accessor :active, Boolean, true_value: [/true/i] # can use Regexp
+  typed_attr_accessor :admin, Boolean, true_values: ["yes"], false_values: ["no"]
+  typed_attr_accessor :active, Boolean, true_values: [/true/i], false_value: [/false/i] # can use Regexp
 
   def initialize(name: nil, default_name: nil)
     self.name = name
@@ -124,6 +124,8 @@ user.admin         # => true
 
 user.active = "TrUe"
 user.active        # => true
+user.active = "FALSE"
+user.active        # => false
 
 user2 = User.new(default_name: "joker")
 user2.default_name # => "joker"
